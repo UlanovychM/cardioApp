@@ -1,9 +1,8 @@
 'use strict';
-
-import form from './form/form';
 import map from './map/map';
+import form from './form/form';
 
 window.addEventListener('DOMContentLoaded', () => {
-  form();
   map();
+  form();
 });
