@@ -1,9 +1,7 @@
 'use strict';
 import 'leaflet/dist/leaflet.css';
-import map from './map/map';
-import form from './form/form';
+import { App } from './App';
 
 window.addEventListener('DOMContentLoaded', () => {
-  map();
-  form();
+  App;
 });
