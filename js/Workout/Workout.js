@@ -10,7 +10,9 @@ export class Workout {
 
   _setDescription() {
     this.type === 'running'
-      ? (this.description = `Running ${this.date}`)
+      ? (this.description = `Running ${new Intl.DateTimeFormat('ua-Ua').format(
+          this.date
+        )}`)
       : (this.description = `Cycling ${this.date}`);
   }
 }

@@ -18,6 +18,7 @@ export class App {
     this._getPosition();
     form.addEventListener('submit', this._newWorkout.bind(this));
     inputType.addEventListener('change', this._toggleClimbField);
+    containerWorkouts.addEventListener('click', this._moveToWorkout.bind(this));
   }
 
   _getPosition() {
@@ -45,6 +46,9 @@ export class App {
     this.#mapEvent = e;
     form.classList.remove('hidden');
     inputDistance.focus();
+  }
+  _hideForm() {
+    form.classList.add('hidden');
   }
 
   _newWorkout(e) {
@@ -85,11 +89,15 @@ export class App {
     this._displayWorkout(workout);
     this._displayWorkoutOnSidebar(workout);
 
+    this._hideForm();
+
     form.reset();
   }
 
   _displayWorkout(workout) {
-    L.marker(workout.coords)
+    const { coords, type, description } = workout;
+
+    L.marker(coords)
       .addTo(this.#map)
       .bindPopup(
         L.popup({
@@ -97,10 +105,10 @@ export class App {
           minWidth: 100,
           autoClose: false,
           closeOnClick: false,
-          className: `${workout.type}-popup`,
+          className: `${type}-popup`,
         })
       )
-      .setPopupContent('You will be here')
+      .setPopupContent(`${type === 'running' ? '🏃' : '🚵‍♂️'} ${description}`)
       .openPopup();
   }
 
@@ -170,6 +178,19 @@ export class App {
     }
 
     form.insertAdjacentHTML('afterend', html);
+  }
+
+  _moveToWorkout(e) {
+    const elemWorkout = e.target.closest('.workout');
+
+    if (!elemWorkout) return;
+
+    const workout = this.#workouts.find(
+      ({ id }) => id === elemWorkout.dataset.id
+    );
+    const { coords } = workout;
+
+    this.#map.setView(coords, 13, { animate: true, pan: { duration: 1 } });
   }
 }
 
